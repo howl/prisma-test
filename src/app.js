@@ -5,7 +5,7 @@ const PORT = process.env.PORT;
 
 const app = express();
 
-app.get('/clients', (req, res) => {
+app.get('/clientes', (req, res) => {
   return res.status(404).json(
     {
       ok: false,
@@ -14,7 +14,16 @@ app.get('/clients', (req, res) => {
   );
 });
 
-app.get('/events', (req, res) => {
+app.post('/clientes', (req, res) => {
+  return res.status(404).json(
+    {
+      ok: false,
+      message: 'De momento no hay nada por aquí'
+    }
+  );
+});
+
+app.get('/eventos', (req, res) => {
   return res.status(404).json(
     {
       ok: false,
