@@ -1,19 +1,48 @@
-import { findClientes } from "../services/cliente.service";
+import {
+  findClientes,
+  findClienteById,
+  createCliente,
+  updateCliente,
+  deleteCliente,
+} from '../services/cliente.service.js';
+import { mapPrismaError } from '../lib/prismaErrors.js';
 
 export const getClientes = async (_req, res, next) => {
   try {
-    const users = await findClientes({
-      //populate: ['posts'],
-    });
-
-    // Poblados con los posts.
-    //const users = await findUsers({ populate: ['posts'] });
-
-    // Probando softDelete:
-    //const users = await findUsers()                                                // solo activos
-    //const users = await findUsers({ filters: { softDelete: false } })              // incluye borrados
-    //const users = await findUsers({ where: { deletedAt: { $ne: null } }, filters: { softDelete: false } })  // solo borrados
-
-    res.json({ data: users, meta: { total: users.length } });
+    const clientes = await findClientes({ includeEventos: true });
+    res.json({ ok: true, data: clientes, meta: { total: clientes.length } });
   } catch (err) { next(err); }
+};
+
+export const getCliente = async (req, res, next) => {
+  try {
+    const cliente = await findClienteById(req.params.id, { includeEventos: true });
+    if (!cliente) {
+      const err = new Error('Cliente no encontrado');
+      err.status = 404;
+      return next(err);
+    }
+    res.json({ ok: true, data: cliente });
+  } catch (err) { next(err); }
+};
+
+export const postCliente = async (req, res, next) => {
+  try {
+    const cliente = await createCliente(req.body);
+    res.status(201).json({ ok: true, data: cliente });
+  } catch (err) { next(mapPrismaError(err)); }
+};
+
+export const patchCliente = async (req, res, next) => {
+  try {
+    const cliente = await updateCliente(req.params.id, req.body);
+    res.json({ ok: true, data: cliente });
+  } catch (err) { next(mapPrismaError(err)); }
+};
+
+export const deleteClienteHandler = async (req, res, next) => {
+  try {
+    const cliente = await deleteCliente(req.params.id);
+    res.json({ ok: true, data: cliente, message: 'Cliente eliminado' });
+  } catch (err) { next(mapPrismaError(err)); }
 };

@@ -1,13 +1,16 @@
 import { Router } from 'express';
-import { getClientes } from '../controllers/cliente.controller';
+import {
+  getClientes,
+  getCliente,
+  postCliente,
+  patchCliente,
+  deleteClienteHandler,
+} from '../controllers/cliente.controller.js';
 
 export const clienteRouter = Router();
 
 clienteRouter.get('/', getClientes);
-// userRouter.get('/', [authenticate], getUsers);
-// userRouter.post('/', [authenticate, authorize('admin')], [validateCreateUser, validate], postUser);
-// userRouter.get('/:userId', [authenticate], getUser);
-// userRouter.post('/:userId/avatar', [authenticate, isSelfOrAdmin], uploadFile('avatar'), postAvatar);
-// userRouter.delete('/:userId/avatar', [authenticate, isSelfOrAdmin], removeAvatar);
-// userRouter.patch('/:userId', [authenticate, isSelfOrAdmin], [validateUpdateUser, validate], patchUser);
-// userRouter.delete('/:userId', [authenticate, isSelfOrAdmin], deleteUser);
+clienteRouter.get('/:id', getCliente);
+clienteRouter.post('/', postCliente);
+clienteRouter.patch('/:id', patchCliente);
+clienteRouter.delete('/:id', deleteClienteHandler);
